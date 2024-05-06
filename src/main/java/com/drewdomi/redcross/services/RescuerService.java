@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.drewdomi.redcross.dtos.RescuerCreateDto;
 import com.drewdomi.redcross.models.Rescuer;
 import com.drewdomi.redcross.repositories.RescuerRespository;
 
@@ -21,5 +22,11 @@ public class RescuerService {
     @Transactional
     public List<Rescuer> findAll() {
         return this.rescuerRespository.findAll();
+    }
+
+    @Transactional
+    public Rescuer registerRescuer(RescuerCreateDto dto) {
+        final var rescuer = new Rescuer(dto);
+        return this.rescuerRespository.save(rescuer);
     }
 }
