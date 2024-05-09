@@ -1,8 +1,10 @@
 package com.drewdomi.redcross.models;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
+import com.drewdomi.redcross.models.enums.AccessType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,11 +27,17 @@ public class Rescuer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "access_type")
+    private AccessType accessType;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -41,6 +49,7 @@ public class Rescuer {
         this.email = dto.email();
         this.name = dto.name();
         this.password = dto.password();
+        this.accessType = Optional.ofNullable(dto.accessType()).orElse(AccessType.USER);
     }
 
     @PrePersist
