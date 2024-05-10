@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
 import com.drewdomi.redcross.models.Rescuer;
+import com.drewdomi.redcross.projections.RescuerProjection;
 import com.drewdomi.redcross.repositories.RescuerRespository;
 
 import jakarta.transaction.Transactional;
@@ -18,7 +19,6 @@ public class RescuerService {
 
     @Autowired
     public final RescuerRespository rescuerRespository;
-
     private final PasswordEncoder passwordEncoder;
 
     public RescuerService(RescuerRespository rescuerRespository, PasswordEncoder passwordEncoder) {
@@ -26,8 +26,8 @@ public class RescuerService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<Rescuer> findAll() {
-        return this.rescuerRespository.findAll();
+    public List<RescuerProjection> findAll() {
+        return this.rescuerRespository.findAllBy();
     }
 
     public Rescuer registerRescuer(RescuerCreateDto dto) {
@@ -39,7 +39,9 @@ public class RescuerService {
             throw new IllegalStateException("Email already in use");
 
         final var rescuer = new Rescuer(dto);
-        rescuer.setPassword(passwordEncoder.encode(rescuer.getPassword()));
+        rescuer.setPassword(
+                passwordEncoder.encode(
+                        rescuer.getPassword()));
         return this.rescuerRespository.save(rescuer);
     }
 }

@@ -11,8 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record RescuerCreateDto(
-
+public record RescuerCreateDto (
     @NotBlank(message = "Name is mandatory")
     @Size(min = 2, max = 255)
     String name,

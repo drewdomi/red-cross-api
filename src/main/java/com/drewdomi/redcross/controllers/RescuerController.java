@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
-import com.drewdomi.redcross.models.Rescuer;
+import com.drewdomi.redcross.projections.RescuerProjection;
 import com.drewdomi.redcross.services.RescuerService;
 
 import jakarta.validation.Valid;
@@ -31,7 +31,7 @@ public class RescuerController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Rescuer>> findAll() {
+    public ResponseEntity<List<RescuerProjection>> findAll() {
         final var users = rescuerService.findAll();
         return ResponseEntity.ok(users);
     }
