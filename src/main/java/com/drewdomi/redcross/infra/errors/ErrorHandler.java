@@ -1,55 +1,55 @@
 package com.drewdomi.redcross.infra.errors;
 
-import jakarta.persistence.EntityNotFoundException;
+import java.util.Map;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.List;
+import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Void> error404() {
-        return ResponseEntity.notFound().build();
+    @ExceptionHandler(value = { NoResourceFoundException.class, HttpRequestMethodNotSupportedException.class })
+    public ResponseEntity<Object> error404() {
+        String errorMessage = "Not found";
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", errorMessage));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<DataErrorValidation>> error400(MethodArgumentNotValidException ex) {
-        List<FieldError> errors = ex.getFieldErrors();
-        return ResponseEntity.badRequest().body(errors.stream().map(DataErrorValidation::new).toList());
+    public ResponseEntity<Object> error400(
+            MethodArgumentNotValidException ex) {
+
+        String errorMessage = ex.getFieldError().getDefaultMessage();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", errorMessage));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<List<DataErrorValidation>> handleDataIntegrityViolationException(
+    public ResponseEntity<Object> handleDataIntegrityViolationException(
             DataIntegrityViolationException ex) {
 
-        String fieldName = "";
-        String errorMessage = "";
-
-        Throwable rootCause = ex.getCause();
-
-        if (rootCause != null && rootCause.getMessage() != null) {
-            String[] parts = rootCause.getMessage().split("\\(");
-            if (parts.length > 1) {
-                fieldName = parts[1].split("\\)")[0].split("=")[0];
-                errorMessage = rootCause.getMessage();
-            }
-        }
-
-        List<DataErrorValidation> errors = List.of(new DataErrorValidation(fieldName, errorMessage));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        String errorMessage = ex.getMessage();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", errorMessage));
     }
 
-    private record DataErrorValidation(String field, String message) {
-        public DataErrorValidation(FieldError error) {
-            this(error.getField(), error.getDefaultMessage());
-        }
+    @ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class })
+    protected ResponseEntity<Object> error409(
+            RuntimeException ex, WebRequest request) {
+
+        String errorMessage = ex.getMessage();
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of("message", errorMessage));
     }
 }

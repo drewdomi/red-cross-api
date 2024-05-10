@@ -13,12 +13,12 @@ import jakarta.validation.constraints.Size;
 
 public record RescuerCreateDto (
     @NotBlank(message = "Name is mandatory")
-    @Size(min = 2, max = 255)
+    @Size(min = 2, max = 255, message = "Name invalid")
     String name,
 
-    @Email
+    @Email(message = "Email invalid")
     @NotBlank(message = "Email is mandatory")
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 255, message = "Email invalid")
     String email,
 
     @NotBlank(message = "Password is mandatory")
@@ -26,12 +26,11 @@ public record RescuerCreateDto (
         regexp = "^(?=.*[a-zA-Z])[a-zA-Z\\d]{8,60}$",
         message = "Password must have at least 8 characters"
     )
-    @Size(min = 8, max = 255)
+    @Size(min = 8, max = 255, message = "Password invalid")
     String password,
 
     @Min(value = 100, message = "Num mechanographic invalid")
     @Max(value = 99999, message = "Num mechanographic invalid")
-
     Integer numMechanographic,
 
     @Enumerated(EnumType.STRING)
