@@ -3,6 +3,7 @@ package com.drewdomi.redcross.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
@@ -18,8 +19,11 @@ public class RescuerService {
     @Autowired
     public final RescuerRespository rescuerRespository;
 
-    public RescuerService(RescuerRespository rescuerRespository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public RescuerService(RescuerRespository rescuerRespository, PasswordEncoder passwordEncoder) {
         this.rescuerRespository = rescuerRespository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Rescuer> findAll() {
@@ -35,6 +39,7 @@ public class RescuerService {
             throw new IllegalStateException("Email already in use");
 
         final var rescuer = new Rescuer(dto);
+        rescuer.setPassword(passwordEncoder.encode(rescuer.getPassword()));
         return this.rescuerRespository.save(rescuer);
     }
 }
