@@ -1,7 +1,6 @@
 package com.drewdomi.redcross.models;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
 import com.drewdomi.redcross.models.enums.AccessType;
@@ -30,14 +29,23 @@ public class Rescuer {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")
     private String password;
 
+    @Column(name = "num_mechanographic", unique = true)
+    private Integer numMechanographic;
+
     @Column(name = "access_type")
     private AccessType accessType;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
+    @Column(name = "first_access")
+    private Boolean firstAccess;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -49,11 +57,16 @@ public class Rescuer {
         this.email = dto.email();
         this.name = dto.name();
         this.password = dto.password();
-        this.accessType = Optional.ofNullable(dto.accessType()).orElse(AccessType.USER);
+        this.accessType = dto.accessType();
+        this.firstAccess = dto.firstAccess();
+        this.isActive = dto.isActive();
+        this.numMechanographic = dto.numMechanographic();
     }
 
     @PrePersist
     protected void onCreate() {
+        this.isActive = true;
+        this.firstAccess = true;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
