@@ -13,7 +13,7 @@ services:
       SPRING_DATASOURCE_USERNAME: compose-postgres
       SPRING_DATASOURCE_PASSWORD: compose-postgres
       SPRING_DATASOURCE_DB: compose-postgres
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
   postgres-db:
     container_name: postgres-db
     image: postgres:16.2
