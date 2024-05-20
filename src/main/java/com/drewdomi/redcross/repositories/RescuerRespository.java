@@ -13,5 +13,7 @@ import com.drewdomi.redcross.projections.RescuerProjection;
 public interface RescuerRespository extends JpaRepository<Rescuer, Long> {
     Optional<Rescuer> findByEmail(String email);
 
+    Optional<Rescuer> findByNumMechanographic(Integer numMechanographic);
+
     List<RescuerProjection> findAllBy();
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
 import com.drewdomi.redcross.models.Rescuer;
@@ -31,12 +32,19 @@ public class RescuerService {
     }
 
     public Rescuer registerRescuer(RescuerCreateDto dto) {
-        boolean userExists = rescuerRespository
+        boolean emailExists = rescuerRespository
                 .findByEmail(dto.email())
                 .isPresent();
 
-        if (userExists)
+        if (emailExists)
             throw new IllegalStateException("Email already in use");
+
+        boolean numMechanographicExists = rescuerRespository
+                .findByNumMechanographic(dto.numMechanographic())
+                .isPresent();
+
+        if (numMechanographicExists)
+            throw new IllegalStateException("Num mechanographic already in use");
 
         final var rescuer = new Rescuer(dto);
         rescuer.setPassword(
