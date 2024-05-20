@@ -1,11 +1,12 @@
 package com.drewdomi.redcross.projections;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.drewdomi.redcross.models.enums.AccessType;
 
 public interface RescuerProjection {
-    Long getId();
+    UUID getId();
 
     String getName();
 

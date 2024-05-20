@@ -1,6 +1,7 @@
 package com.drewdomi.redcross.models;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
 import com.drewdomi.redcross.models.enums.AccessType;
@@ -23,8 +24,8 @@ import lombok.NoArgsConstructor;
 public class Rescuer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "name")
     private String name;
