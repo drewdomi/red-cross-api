@@ -8,15 +8,30 @@ services:
       - "5431:5432"
     depends_on:
       - postgres-db
+    extra_hosts:
+      - host.docker.internal:host-gateway
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/compose-postgres
       SPRING_DATASOURCE_USERNAME: compose-postgres
       SPRING_DATASOURCE_PASSWORD: compose-postgres
       SPRING_DATASOURCE_DB: compose-postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
+    networks:
+      - my_network
+
   postgres-db:
     container_name: postgres-db
     image: postgres:16.2
     environment:
       POSTGRES_USER: compose-postgres
       POSTGRES_PASSWORD: compose-postgres
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16
