@@ -12,13 +12,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    private static final String[] WHITE_LIST_ENDPOINTS = {
+            "/login",
+            "/users"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/**")
-                            .permitAll();
+                    auth.requestMatchers(WHITE_LIST_ENDPOINTS)
+                            .permitAll().anyRequest().authenticated();
                 });
         return http.build();
     }
