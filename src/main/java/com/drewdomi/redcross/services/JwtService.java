@@ -1,4 +1,4 @@
-package com.drewdomi.redcross.configs.jwt;
+package com.drewdomi.redcross.services;
 
 import java.security.Key;
 import java.util.Date;
