@@ -15,9 +15,9 @@ services:
       SPRING_DATASOURCE_USERNAME: compose-postgres
       SPRING_DATASOURCE_PASSWORD: compose-postgres
       SPRING_DATASOURCE_DB: compose-postgres
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     networks:
-      - my_network
+      - custom_network
 
   postgres-db:
     container_name: postgres-db
@@ -26,10 +26,10 @@ services:
       POSTGRES_USER: compose-postgres
       POSTGRES_PASSWORD: compose-postgres
     networks:
-      - my_network
+      - custom_network
 
 networks:
-  my_network:
+  custom_network:
     driver: bridge
     ipam:
       driver: default
