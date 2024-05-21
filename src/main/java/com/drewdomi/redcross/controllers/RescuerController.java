@@ -30,7 +30,7 @@ public class RescuerController {
         this.rescuerService = rescuerService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<RescuerProjection>> findAll() {
         final var users = rescuerService.findAll();
         return ResponseEntity.ok(users);
