@@ -20,7 +20,7 @@ public class WebSecurityConfig {
 
     private static final String[] WHITE_LIST_ENDPOINTS = {
             "/auth",
-            "/users/**"
+            "/users"
     };
 
     public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
