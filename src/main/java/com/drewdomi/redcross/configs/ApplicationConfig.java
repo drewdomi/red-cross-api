@@ -1,5 +1,6 @@
 package com.drewdomi.redcross.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,14 +17,16 @@ import com.drewdomi.redcross.repositories.RescuerRespository;
 @Configuration
 public class ApplicationConfig {
 
+    @Autowired
     private RescuerRespository rescuerRespository;
 
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            return rescuerRespository
+            var user = rescuerRespository
                     .findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException("Rescuer not found"));
+            return user;
         };
     }
 

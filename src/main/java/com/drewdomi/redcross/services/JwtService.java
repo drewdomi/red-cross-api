@@ -11,6 +11,9 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.drewdomi.redcross.models.Rescuer;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,6 +21,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Service
+@Transactional
 public class JwtService {
 
     @Value("${application.security.jwt.secret-key}")
@@ -83,6 +87,16 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
+    }
+
+    public String generateToken(Rescuer userDetails) {
+        return generateToken(userDetails, new HashMap<>());
+    }
+
+    public String generateToken(
+            Rescuer userDetails,
+            Map<String, Object> extraClaims) {
+        return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
 }

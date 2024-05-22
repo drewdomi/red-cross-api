@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
 import com.drewdomi.redcross.models.Rescuer;
@@ -19,13 +18,10 @@ import jakarta.transaction.Transactional;
 public class RescuerService {
 
     @Autowired
-    public final RescuerRespository rescuerRespository;
-    private final PasswordEncoder passwordEncoder;
+    private RescuerRespository rescuerRespository;
 
-    public RescuerService(RescuerRespository rescuerRespository, PasswordEncoder passwordEncoder) {
-        this.rescuerRespository = rescuerRespository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<RescuerProjection> findAll() {
         return this.rescuerRespository.findAllBy();

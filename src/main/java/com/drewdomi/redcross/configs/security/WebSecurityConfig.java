@@ -15,8 +15,8 @@ import com.drewdomi.redcross.configs.jwt.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-    private AuthenticationProvider authenticationProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider authenticationProvider;
 
     private static final String[] WHITE_LIST_ENDPOINTS = {
             "/auth",
