@@ -2,6 +2,7 @@ package com.drewdomi.redcross.configs.jwt;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,12 +18,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    @Autowired
     private JwtService jwtService;
+
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
@@ -33,17 +39,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         final var authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || authHeader.startsWith("Bearer ")) {
+        if (authHeader == null) {
             filterChain.doFilter(request, response);
             return;
         }
+
         final var jwt = authHeader.substring(7);
         final var userEmail = jwtService.extractUsername(jwt);
 
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            final var userDetails = this.userDetailsService
-                    .loadUserByUsername(userEmail);
+        final var userDetails = this.userDetailsService
+                .loadUserByUsername(userEmail);
 
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 final var authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
@@ -55,5 +62,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
 }

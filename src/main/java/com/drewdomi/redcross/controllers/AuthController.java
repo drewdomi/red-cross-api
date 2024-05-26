@@ -7,25 +7,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.drewdomi.redcross.dtos.AuthResponse;
 import com.drewdomi.redcross.dtos.LoginDto;
 import com.drewdomi.redcross.services.AuthService;
 
 @RestController
 @RequestMapping("auth")
-public class AuthController extends Object {
-
-    private final AuthService authService;
+public class AuthController {
 
     @Autowired
-    public AuthController(
-            AuthService authService) {
-        this.authService = authService;
-    }
+    private AuthService authService;
 
     @PostMapping
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginDto loginDto) {
-        return ResponseEntity.ok(authService.login(loginDto.email(), loginDto.password()));
+    public ResponseEntity<Object> login(@RequestBody LoginDto loginDto) {
+        final var token = authService.login(loginDto.email(), loginDto.password());
+        return ResponseEntity.ok(token);
     }
-
 }

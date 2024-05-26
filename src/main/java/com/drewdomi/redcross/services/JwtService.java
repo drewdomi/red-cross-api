@@ -30,9 +30,6 @@ public class JwtService {
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
 
-    @Value("${application.security.jwt.refresh-token.expiration}")
-    private long refreshExpiration;
-
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -54,10 +51,6 @@ public class JwtService {
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final var claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
-    }
-
-    public String generateRefreshToken(UserDetails userDetails) {
-        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
     public String buildToken(

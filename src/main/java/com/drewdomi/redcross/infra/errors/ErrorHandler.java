@@ -70,7 +70,6 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-
     public ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         Throwable cause = ex.getCause();
         if (cause instanceof InvalidFormatException) {
@@ -85,4 +84,5 @@ public class ErrorHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", "Invalid request body"));
     }
+
 }

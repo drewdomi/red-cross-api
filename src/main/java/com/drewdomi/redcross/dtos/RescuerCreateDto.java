@@ -21,7 +21,7 @@ public record RescuerCreateDto (
     @NotBlank(message = "Email is mandatory")
     @Size(min = 3, max = 255, message = "Email invalid")
     String email,
-
+    
     @NotBlank(message = "Password is mandatory")
     @Pattern(
         regexp = "^(?=.*[a-zA-Z])[a-zA-Z\\d]{8,255}$",

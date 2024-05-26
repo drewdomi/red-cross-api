@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,18 +21,19 @@ public class ApplicationConfig {
     @Autowired
     private RescuerRespository rescuerRespository;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
-            var user = rescuerRespository
-                    .findByEmail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("Rescuer not found"));
-            return user;
-        };
+    private UserDetails loadRescuerByEmail(String username) {
+        return rescuerRespository
+            .findByEmail(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Rescuer not found"));
     }
 
     @Bean
-    public AuthenticationProvider AuthenticationProvider() {
+    public UserDetailsService userDetailsService() {
+        return this::loadRescuerByEmail;
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
         final var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());

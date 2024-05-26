@@ -21,21 +21,17 @@ import jakarta.validation.Valid;
 @RequestMapping("users")
 public class RescuerController {
 
-    private final RescuerService rescuerService;
-
     @Autowired
-    public RescuerController(RescuerService rescuerService) {
-        this.rescuerService = rescuerService;
-    }
+    private RescuerService rescuerService;
 
     @GetMapping
-    public ResponseEntity<List<RescuerProjection>> findAll() {
+    public ResponseEntity<List<RescuerProjection>> listAllRescuers() {
         final var users = rescuerService.findAll();
         return ResponseEntity.ok(users);
     }
 
     @PostMapping("create")
-    public ResponseEntity<Void> save(@RequestBody @Valid RescuerCreateDto dto) {
+    public ResponseEntity<Void> createRescuer(@RequestBody @Valid RescuerCreateDto dto) {
         rescuerService.registerRescuer(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

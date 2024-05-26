@@ -27,7 +27,7 @@ public class RescuerService {
         return this.rescuerRespository.findAllBy();
     }
 
-    public Rescuer registerRescuer(RescuerCreateDto dto) {
+    public void registerRescuer(RescuerCreateDto dto) {
         boolean emailExists = rescuerRespository
                 .findByEmail(dto.email())
                 .isPresent();
@@ -35,17 +35,17 @@ public class RescuerService {
         if (emailExists)
             throw new IllegalStateException("Email already in use");
 
-        boolean numMechanographicExists = rescuerRespository
+        boolean numMechanographicAlreadyRegistered = rescuerRespository
                 .findByNumMechanographic(dto.numMechanographic())
                 .isPresent();
 
-        if (numMechanographicExists)
+        if (numMechanographicAlreadyRegistered)
             throw new IllegalStateException("Num mechanographic already in use");
 
         final var rescuer = new Rescuer(dto);
-        rescuer.setPassword(
-                passwordEncoder.encode(
-                        rescuer.getPassword()));
-        return this.rescuerRespository.save(rescuer);
+
+        rescuer.setPassword(passwordEncoder.encode(rescuer.getPassword()));
+
+        this.rescuerRespository.save(rescuer);
     }
 }
