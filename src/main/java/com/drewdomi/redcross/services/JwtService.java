@@ -1,24 +1,21 @@
 package com.drewdomi.redcross.services;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import javax.crypto.SecretKey;
-
+import com.drewdomi.redcross.models.Rescuer;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.drewdomi.redcross.models.Rescuer;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Service
 @Transactional
@@ -41,11 +38,11 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts
-                .parser()
-                .verifyWith((SecretKey) getSignInKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+            .parser()
+            .verifyWith((SecretKey) getSignInKey())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -54,19 +51,22 @@ public class JwtService {
     }
 
     public String buildToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails,
-            long expiration) {
+        Map<String, Object> extraClaims,
+        Rescuer userDetails,
+        long expiration) {
+
+        Map<String, Object> claims = new HashMap<>(extraClaims);
+        claims.put("id", userDetails.getId());
+        claims.put("numMechanographic", userDetails.getNumMechanographic());
+        claims.put("access", userDetails.getAccessType().name());
+
         return Jwts
-                .builder()
-                .claims()
-                .add(extraClaims)
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .and()
-                .signWith(getSignInKey())
-                .compact();
+            .builder()
+            .claims(claims)
+            .signWith(getSignInKey())
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + expiration))
+            .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -87,8 +87,8 @@ public class JwtService {
     }
 
     public String generateToken(
-            Rescuer userDetails,
-            Map<String, Object> extraClaims) {
+        Rescuer userDetails,
+        Map<String, Object> extraClaims) {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
