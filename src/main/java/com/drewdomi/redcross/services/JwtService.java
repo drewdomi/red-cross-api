@@ -27,16 +27,16 @@ public class JwtService {
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
     private Key getSignInKey() {
         final var key = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(key);
     }
 
-    private Claims extractAllClaims(String token) {
+    public String extractUsername(String token) {
+        return extractClaim(token, claims -> claims.get("email", String.class));
+    }
+
+    public Claims extractAllClaims(String token) {
         return Jwts
             .parser()
             .verifyWith((SecretKey) getSignInKey())
@@ -58,19 +58,20 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>(extraClaims);
         claims.put("id", userDetails.getId());
         claims.put("numMechanographic", userDetails.getNumMechanographic());
+        claims.put("email", userDetails.getUsername());
         claims.put("access", userDetails.getAccessType().name());
 
         return Jwts
             .builder()
             .claims(claims)
-            .signWith(getSignInKey())
             .issuedAt(new Date(System.currentTimeMillis()))
             .expiration(new Date(System.currentTimeMillis() + expiration))
+            .signWith(getSignInKey())
             .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final var username = extractUsername(token);
+        final var username = this.extractAllClaims(token).get("email", String.class);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
