@@ -22,8 +22,14 @@ public class WebSecurityConfig {
     private static final String[] WHITE_LIST_ENDPOINTS = {
         "/auth",
     };
+    private static final String[] ADMIN_ROLES_LIST_ENDPOINTS = {
+        "/rescuer/**",
+    };
 
-    public WebSecurityConfig(JwtAuthFilter jwtAuthenticationFilter, AuthenticationProvider authenticationProvider) {
+    public WebSecurityConfig(
+        JwtAuthFilter jwtAuthenticationFilter,
+        AuthenticationProvider authenticationProvider
+    ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.authenticationProvider = authenticationProvider;
     }
@@ -31,10 +37,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST_ENDPOINTS)
-            .permitAll()
-            .anyRequest()
-            .authenticated());
+        http.authorizeHttpRequests(auth ->
+            auth
+                .requestMatchers(WHITE_LIST_ENDPOINTS)
+                .permitAll()
+                .requestMatchers(ADMIN_ROLES_LIST_ENDPOINTS)
+                .hasAuthority("ADMIN")
+                .anyRequest()
+                .authenticated()
+        );
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider);
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

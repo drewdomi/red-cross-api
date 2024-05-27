@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("rescuer")
 public class RescuerController {
 
     private final RescuerService rescuerService;
@@ -28,7 +28,7 @@ public class RescuerController {
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<Void> createRescuer(@RequestBody @Valid RescuerCreateDto dto) {
         rescuerService.registerRescuer(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
