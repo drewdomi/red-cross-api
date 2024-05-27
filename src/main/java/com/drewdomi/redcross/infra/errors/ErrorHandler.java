@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -21,12 +22,13 @@ public class ErrorHandler {
 
     @ExceptionHandler(value = {
         NoResourceFoundException.class,
-        HttpRequestMethodNotSupportedException.class
+        HttpRequestMethodNotSupportedException.class,
+        RescuerNotFoundException.class
     })
-    public ResponseEntity<Object> handleNotFoundExceptions() {
+    public ResponseEntity<Object> handleNotFoundExceptions(RuntimeException ex) {
         return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
-            .body(Map.of(MESSAGE, "Not found"));
+            .body(Map.of(MESSAGE, ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -82,4 +84,10 @@ public class ErrorHandler {
             .body(Map.of(MESSAGE, "Invalid request body"));
     }
 
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public static class RescuerNotFoundException extends RuntimeException {
+        public RescuerNotFoundException(String message) {
+            super(message);
+        }
+    }
 }

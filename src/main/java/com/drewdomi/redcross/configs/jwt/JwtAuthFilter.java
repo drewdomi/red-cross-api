@@ -47,9 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         final var jwt = authHeader.substring(7);
-
         final var userEmail = jwtService.extractAllClaims((jwt)).get("email", String.class);
-
         final var userDetails = this.userDetailsService
             .loadUserByUsername(userEmail);
 

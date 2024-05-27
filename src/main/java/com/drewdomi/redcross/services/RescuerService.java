@@ -2,12 +2,11 @@ package com.drewdomi.redcross.services;
 
 import com.drewdomi.redcross.dtos.RescuerCreateDto;
 import com.drewdomi.redcross.dtos.RescuerDto;
+import com.drewdomi.redcross.infra.errors.ErrorHandler;
 import com.drewdomi.redcross.mappers.RescuerMapper;
 import com.drewdomi.redcross.models.Rescuer;
 import com.drewdomi.redcross.repositories.RescuerRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 @Transactional
 public class RescuerService {
@@ -59,8 +57,7 @@ public class RescuerService {
 
     public RescuerDto findById(UUID id) {
         final var rescuer = rescuerRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Rescuer not found"));
+            .orElseThrow(() -> new ErrorHandler.RescuerNotFoundException("Rescuer not found"));
         return RescuerMapper.INSTANCE.toProjection(rescuer);
     }
-
 }

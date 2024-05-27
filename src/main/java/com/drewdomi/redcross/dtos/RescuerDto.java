@@ -11,13 +11,9 @@ public record RescuerDto(
     String email,
     Integer numMechanographic,
     AccessType accessType,
-
     Boolean isActive,
-
     Boolean firstAccess,
-
     LocalDateTime createdAt,
-
     LocalDateTime updatedAt
 ) {
 }

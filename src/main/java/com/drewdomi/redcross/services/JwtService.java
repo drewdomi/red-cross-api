@@ -88,5 +88,4 @@ public class JwtService {
         Map<String, Object> extraClaims) {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
-
 }
