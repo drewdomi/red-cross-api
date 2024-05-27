@@ -1,6 +1,6 @@
 package com.drewdomi.redcross.configs;
 
-import com.drewdomi.redcross.repositories.RescuerRespository;
+import com.drewdomi.redcross.repositories.RescuerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,16 +16,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class ApplicationConfig {
-
-    private final RescuerRespository rescuerRespository;
+    private final RescuerRepository rescuerRepository;
 
     @Autowired
-    public ApplicationConfig(RescuerRespository rescuerRespository) {
-        this.rescuerRespository = rescuerRespository;
+    public ApplicationConfig(
+        RescuerRepository rescuerRepository
+    ) {
+        this.rescuerRepository = rescuerRepository;
     }
 
     private UserDetails loadRescuerByEmail(String username) {
-        return rescuerRespository
+        return rescuerRepository
             .findByEmail(username)
             .orElseThrow(() -> new UsernameNotFoundException("Rescuer not found"));
     }

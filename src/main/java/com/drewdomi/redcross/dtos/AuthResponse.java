@@ -1,7 +1,6 @@
 package com.drewdomi.redcross.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class AuthResponse {
-
     @JsonProperty("token")
     private String token;
 

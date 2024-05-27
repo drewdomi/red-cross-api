@@ -17,7 +17,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ErrorHandler {
-
     private static final String MESSAGE = "message";
 
     @ExceptionHandler(value = {
