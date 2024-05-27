@@ -1,7 +1,6 @@
 package com.drewdomi.redcross.configs.security;
 
 import com.drewdomi.redcross.configs.jwt.JwtAuthFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,15 +15,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Autowired
-    private JwtAuthFilter jwtAuthenticationFilter;
+    private final JwtAuthFilter jwtAuthenticationFilter;
 
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
+    private final AuthenticationProvider authenticationProvider;
 
     private static final String[] WHITE_LIST_ENDPOINTS = {
         "/auth",
     };
+
+    public WebSecurityConfig(JwtAuthFilter jwtAuthenticationFilter, AuthenticationProvider authenticationProvider) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.authenticationProvider = authenticationProvider;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

@@ -32,10 +32,6 @@ public class JwtService {
         return Keys.hmacShaKeyFor(key);
     }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, claims -> claims.get("email", String.class));
-    }
-
     public Claims extractAllClaims(String token) {
         return Jwts
             .parser()
