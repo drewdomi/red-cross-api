@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,8 +19,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE rescuer SET is_active = false WHERE id=?")
-@SQLRestriction("is_active <> false")
+//@SQLDelete(sql = "UPDATE rescuer SET is_active = false WHERE id=?")
+//@SQLRestriction("is_active <> false")
 public class Rescuer implements UserDetails {
 
     @Id

@@ -23,10 +23,17 @@ public class RescuerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RescuerDto>> listAllRescuers() {
+    public ResponseEntity<List<RescuerDto>> listAllRescuers(@RequestParam(required = false) Boolean isActive) {
+        
         final var users = rescuerService.findAll();
         return ResponseEntity.ok(users);
     }
+
+//    @GetMapping
+//    public ResponseEntity<List<RescuerDto>> listAllRescuersIncludeInactive(@RequestParam boolean isActive) {
+//        final var users = rescuerService.findAll();
+//        return ResponseEntity.ok(users);
+//    }
 
     @PostMapping
     public ResponseEntity<Void> createRescuer(@RequestBody @Valid RescuerCreateDto dto) {

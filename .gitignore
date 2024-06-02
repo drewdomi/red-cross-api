@@ -38,4 +38,5 @@ out/
 
 ### Docker ###
 src/main/docker/**.jar
+.docker
 
