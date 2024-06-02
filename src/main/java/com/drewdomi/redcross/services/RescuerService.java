@@ -60,4 +60,9 @@ public class RescuerService {
             .orElseThrow(() -> new ErrorHandler.RescuerNotFoundException("Rescuer not found"));
         return RescuerMapper.INSTANCE.toProjection(rescuer);
     }
+
+    public void deleteById(UUID id) {
+//        findById(id);
+        rescuerRepository.deleteById(id);
+    }
 }

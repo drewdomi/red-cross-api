@@ -39,4 +39,10 @@ public class RescuerController {
         final var rescuer = rescuerService.findById(id);
         return ResponseEntity.ok(rescuer);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
+        rescuerService.deleteById(id);
+        return null;
+    }
 }
