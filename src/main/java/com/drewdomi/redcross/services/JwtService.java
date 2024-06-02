@@ -20,7 +20,6 @@ import java.util.function.Function;
 @Service
 @Transactional
 public class JwtService {
-
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 

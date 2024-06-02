@@ -28,7 +28,6 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(email, password));
 
         var token = jwtService.generateToken(user);
-
         return AuthResponse
             .builder()
             .token(token)

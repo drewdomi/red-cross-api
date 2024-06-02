@@ -25,6 +25,7 @@ public class Rescuer implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "name")
     private String name;
 
     @Column(unique = true)
