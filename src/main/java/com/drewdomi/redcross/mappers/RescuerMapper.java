@@ -5,9 +5,13 @@ import com.drewdomi.redcross.models.Rescuer;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface RescuerMapper {
     RescuerMapper INSTANCE = Mappers.getMapper(RescuerMapper.class);
 
-    RescuerDto toProjection(Rescuer rescuer);
+    List<RescuerDto> rescuersToRescuerDtos(List<Rescuer> rescuers);
+
+    RescuerDto rescuerToRescuerDto(Rescuer rescuer);
 }

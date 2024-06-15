@@ -33,6 +33,11 @@ public class RescuerService {
         return this.rescuerRepository.findAllBy();
     }
 
+    public List<RescuerDto> findAllIncludeInactive() {
+        final var rescuers = this.rescuerRepository.findAllIncludeInactive();
+        return RescuerMapper.INSTANCE.rescuersToRescuerDtos(rescuers);
+    }
+
     public void registerRescuer(RescuerCreateDto dto) {
         boolean emailExists = rescuerRepository
             .findByEmail(dto.email())
@@ -58,11 +63,11 @@ public class RescuerService {
     public RescuerDto findById(UUID id) {
         final var rescuer = rescuerRepository.findById(id)
             .orElseThrow(() -> new ErrorHandler.RescuerNotFoundException("Rescuer not found"));
-        return RescuerMapper.INSTANCE.toProjection(rescuer);
+        return RescuerMapper.INSTANCE.rescuerToRescuerDto(rescuer);
     }
 
     public void deleteById(UUID id) {
-//        findById(id);
+        findById(id);
         rescuerRepository.deleteById(id);
     }
 }
