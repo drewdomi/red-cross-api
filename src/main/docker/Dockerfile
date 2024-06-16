@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-alpine
+FROM adoptopenjdk:latest
 ARG JAR_FILE=*.jar
 WORKDIR /demo
 COPY ${JAR_FILE} application.jar

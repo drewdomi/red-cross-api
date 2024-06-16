@@ -1,32 +1,73 @@
 package com.drewdomi.redcross.services;
 
-import java.util.List;
-
+import com.drewdomi.redcross.dtos.RescuerCreateDto;
+import com.drewdomi.redcross.dtos.RescuerDto;
+import com.drewdomi.redcross.infra.errors.ErrorHandler;
+import com.drewdomi.redcross.mappers.RescuerMapper;
+import com.drewdomi.redcross.models.Rescuer;
+import com.drewdomi.redcross.repositories.RescuerRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.drewdomi.redcross.dtos.RescuerCreateDto;
-import com.drewdomi.redcross.models.Rescuer;
-import com.drewdomi.redcross.repositories.RescuerRespository;
-
-import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.UUID;
 
 @Service
+@Transactional
 public class RescuerService {
+    private final RescuerRepository rescuerRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public final RescuerRespository rescuerRespository;
-
-    public RescuerService(RescuerRespository rescuerRespository) {
-        this.rescuerRespository = rescuerRespository;
+    @Autowired
+    public RescuerService(
+        RescuerRepository rescuerRepository,
+        PasswordEncoder passwordEncoder
+    ) {
+        this.rescuerRepository = rescuerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
-    public List<Rescuer> findAll() {
-        return this.rescuerRespository.findAll();
+    public List<RescuerDto> findAll() {
+        return this.rescuerRepository.findAllBy();
     }
 
-    @Transactional
-    public Rescuer registerRescuer(RescuerCreateDto dto) {
+    public List<RescuerDto> findAllIncludeInactive() {
+        final var rescuers = this.rescuerRepository.findAllIncludeInactive();
+        return RescuerMapper.INSTANCE.rescuersToRescuerDtos(rescuers);
+    }
+
+    public void registerRescuer(RescuerCreateDto dto) {
+        boolean emailExists = rescuerRepository
+            .findByEmail(dto.email())
+            .isPresent();
+
+        if (emailExists)
+            throw new IllegalStateException("Email already in use");
+
+        boolean numMechanographicAlreadyRegistered = rescuerRepository
+            .findByNumMechanographic(dto.numMechanographic())
+            .isPresent();
+
+        if (numMechanographicAlreadyRegistered)
+            throw new IllegalStateException("Num mechanographic already in use");
+
         final var rescuer = new Rescuer(dto);
-        return this.rescuerRespository.save(rescuer);
+
+        rescuer.setPassword(passwordEncoder.encode(rescuer.getPassword()));
+
+        this.rescuerRepository.save(rescuer);
+    }
+
+    public RescuerDto findById(UUID id) {
+        final var rescuer = rescuerRepository.findById(id)
+            .orElseThrow(() -> new ErrorHandler.RescuerNotFoundException("Rescuer not found"));
+        return RescuerMapper.INSTANCE.rescuerToRescuerDto(rescuer);
+    }
+
+    public void deleteById(UUID id) {
+        findById(id);
+        rescuerRepository.deleteById(id);
     }
 }

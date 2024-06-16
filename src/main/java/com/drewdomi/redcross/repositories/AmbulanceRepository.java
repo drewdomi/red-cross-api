@@ -1,10 +1,11 @@
 package com.drewdomi.redcross.repositories;
 
+import com.drewdomi.redcross.models.Ambulance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.drewdomi.redcross.models.Rescuer;
+import java.util.UUID;
 
 @Repository
-public interface RescuerRespository extends JpaRepository<Rescuer, Long> {
+public interface AmbulanceRepository extends JpaRepository<Ambulance, UUID> {
 }
