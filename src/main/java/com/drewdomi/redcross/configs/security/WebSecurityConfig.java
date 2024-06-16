@@ -21,10 +21,10 @@ public class WebSecurityConfig {
 
     private static final String[] WHITE_LIST_ENDPOINTS = {
         "/auth",
-        "/rescuer"
     };
     private static final String[] ADMIN_ROLES_LIST_ENDPOINTS = {
-        "/escuer/**",
+        "/rescuer/**",
+        "/ambulance/**"
     };
 
     public WebSecurityConfig(
