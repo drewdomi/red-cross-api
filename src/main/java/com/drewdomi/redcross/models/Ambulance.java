@@ -1,5 +1,6 @@
 package com.drewdomi.redcross.models;
 
+import com.drewdomi.redcross.dtos.AmbulanceCreateDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,5 +45,12 @@ public class Ambulance {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+    
+    public Ambulance(AmbulanceCreateDto dto) {
+        this.brand = dto.brand();
+        this.plate = dto.plate();
+        this.number = dto.number();
+        this.status = dto.status();
     }
 }
