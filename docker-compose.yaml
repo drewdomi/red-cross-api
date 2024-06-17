@@ -1,37 +1,21 @@
 services:
-  red-cross-api:
-    container_name: red-cross-api
-    image: red-cross-api:1.0
-    build:
-      context: .
-    ports:
-      - "5432"
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    environment:
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: secret
-      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
-    networks:
-      - red_cross_network
-    depends_on:
-      - db
-
-  db:
-    container_name: db
+  postgres:
+    container_name: postgres
     image: postgres:16.2
     restart: always
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: compose
+    ports:
+      - '5432'
     networks:
       - red_cross_network
     volumes:
-      - ./.docker/db:/var/lib/postgresql/data
+      - ./.docker/postgres:/var/lib/postgresql/data
 
 volumes:
-  db:
+  postgres:
 
 networks:
   red_cross_network:

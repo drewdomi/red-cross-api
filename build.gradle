@@ -38,6 +38,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    runtimeOnly 'org.springframework.boot:spring-boot-docker-compose'
     testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 }
 
