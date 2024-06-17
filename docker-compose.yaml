@@ -1,37 +1,37 @@
 services:
-  spring-app:
-    container_name: spring-app
-    image: spring-app:1.0
+  red-cross-api:
+    container_name: red-cross-api
+    image: red-cross-api:1.0
     build:
       context: .
     ports:
-      - "5431:5432"
+      - "5432"
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
-      SPRING_DATASOURCE_USERNAME: compose-postgres
-      SPRING_DATASOURCE_PASSWORD: compose-postgres
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: secret
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
     networks:
       - red_cross_network
     depends_on:
-      - red-cross-api-db
+      - db
 
-  red-cross-api-db:
-    container_name: red-cross-api-db
+  db:
+    container_name: db
     image: postgres:16.2
     restart: always
     environment:
-      POSTGRES_USER: compose-postgres
-      POSTGRES_PASSWORD: compose-postgres
-      POSTGRES_DB: compose-postgres
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: compose
     networks:
       - red_cross_network
     volumes:
-      - red-cross-api-db:/var/lib/postgresql/data
+      - ./.docker/db:/var/lib/postgresql/data
 
 volumes:
-  red-cross-api-db:
+  db:
 
 networks:
   red_cross_network:
