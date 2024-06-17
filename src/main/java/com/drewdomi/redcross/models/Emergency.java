@@ -28,7 +28,7 @@ public class Emergency {
     private String obs;
 
     @OneToOne(optional = false)
-    @PrimaryKeyJoinColumn(name = "registered_by")
+    @PrimaryKeyJoinColumn(name = "registered_by_id")
     @MapsId
     private Rescuer registeredBy;
 

@@ -6,27 +6,27 @@ services:
       context: .
     ports:
       - "5431:5432"
-    depends_on:
-      - red-cross-api-db
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/compose-postgres
       SPRING_DATASOURCE_USERNAME: compose-postgres
       SPRING_DATASOURCE_PASSWORD: compose-postgres
-      SPRING_DATASOURCE_DB: compose-postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
     networks:
-      - custom_network
+      - red_cross_network
+    depends_on:
+      - red-cross-api-db
 
   red-cross-api-db:
     container_name: red-cross-api-db
     image: postgres:16.2
+    restart: always
     environment:
       POSTGRES_USER: compose-postgres
       POSTGRES_PASSWORD: compose-postgres
+      POSTGRES_DB: compose-postgres
     networks:
-      - custom_network
+      - red_cross_network
     volumes:
       - red-cross-api-db:/var/lib/postgresql/data
 
@@ -34,7 +34,7 @@ volumes:
   red-cross-api-db:
 
 networks:
-  custom_network:
+  red_cross_network:
     driver: bridge
     ipam:
       driver: default
