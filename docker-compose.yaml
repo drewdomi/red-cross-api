@@ -1,6 +1,6 @@
 services:
-  postgres:
-    container_name: postgres
+  postgres-database:
+    container_name: postgres-database
     image: postgres:16.2
     restart: always
     environment:
@@ -9,18 +9,8 @@ services:
       POSTGRES_DB: compose
     ports:
       - '5432'
-    networks:
-      - red_cross_network
     volumes:
-      - ./.docker/postgres:/var/lib/postgresql/data
+      - ./.docker/postgres-database:/var/lib/postgresql/data
 
 volumes:
-  postgres:
-
-networks:
-  red_cross_network:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.25.0.0/16
+  postgres-database:

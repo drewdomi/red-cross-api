@@ -10,10 +10,6 @@ For building and running the application you need:
 ## Running the Spring API
 
 ```bash
-
-# Run docker image for the Spring application & Postgres database
-$ docker compose up
-
-# If there are no errors, navigate to the root of the project and run it:
+# Just run it by clicking the play button or by using the command below. Everything is already set up.
 $ ./gradlew bootRun --continuous
 ```
