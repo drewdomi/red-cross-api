@@ -1,13 +1,10 @@
 CREATE TABLE ambulance
 (
     id         UUID PRIMARY KEY,
-    brand      VARCHAR(255),
-    plate      VARCHAR(255) UNIQUE,
-    number     VARCHAR(255) UNIQUE,
-    status     BOOLEAN,
+    brand      VARCHAR(50)        NOT NULL,
+    plate      VARCHAR(10) UNIQUE NOT NULL,
+    number     VARCHAR(10) UNIQUE NOT NULL,
+    status     BOOLEAN            NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
-
-ALTER TABLE ambulance
-    ALTER COLUMN status SET DEFAULT TRUE;
