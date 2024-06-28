@@ -24,7 +24,7 @@ public class RescuerController {
 
     @GetMapping
     public ResponseEntity<List<RescuerDto>> listAllRescuers(@RequestParam(defaultValue = "false") Boolean isActive) {
-        final var users = isActive ? rescuerService.findAllIncludeInactive() : rescuerService.findAll();
+        final var users = Boolean.TRUE.equals(isActive) ? rescuerService.findAllIncludeInactive() : rescuerService.findAll();
         return ResponseEntity.ok(users);
     }
 
@@ -43,6 +43,6 @@ public class RescuerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         rescuerService.deleteById(id);
-        return null;
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

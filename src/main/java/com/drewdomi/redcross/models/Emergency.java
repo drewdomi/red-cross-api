@@ -28,18 +28,18 @@ public class Emergency {
     private String obs;
 
     @OneToOne(optional = false)
-    @PrimaryKeyJoinColumn(name = "registered_by_id")
+    @PrimaryKeyJoinColumn(name = "registered_by")
     @MapsId
     private Rescuer registeredBy;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @Column(name = "completed_at")
-    private LocalDateTime completedAt;
 
     @PrePersist
     protected void onCreate() {

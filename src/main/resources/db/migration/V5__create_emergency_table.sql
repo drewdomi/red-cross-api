@@ -12,6 +12,7 @@ CREATE TABLE emergency
     reason         VARCHAR(255),
     start_register TIMESTAMP,
     obs            VARCHAR(255),
+    completed_at   TIMESTAMP,
     created_at     TIMESTAMP,
     updated_at     TIMESTAMP
 );
